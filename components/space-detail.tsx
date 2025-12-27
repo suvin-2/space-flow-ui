@@ -4,13 +4,32 @@ import { useState } from "react"
 import { Card } from "./ui/card"
 import { Button } from "./ui/button"
 import { BookingWidget } from "./booking-widget"
-import { Star, MapPin, Users, Wifi, Car, Wind, Coffee, Projector, ChevronLeft, ChevronRight } from "lucide-react"
+import { Star, MapPin, Users, Wifi, Car, Wind, Coffee, Projector, ChevronLeft, ChevronRight, Pencil, Trash2, X, Check } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { Textarea } from "./ui/textarea"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog"
 import { cn } from "@/lib/utils"
 
 interface SpaceDetailProps {
   onBack?: () => void
+}
+
+interface Review {
+  id: number
+  name: string
+  avatar: string
+  rating: number
+  date: string
+  comment: string
+  isOwn?: boolean
 }
 
 const SPACE_IMAGES = [
@@ -53,6 +72,15 @@ const MOCK_REVIEWS = [
 
 export function SpaceDetail({ onBack }: SpaceDetailProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [reviews, setReviews] = useState<Review[]>(MOCK_REVIEWS)
+  const [reviewText, setReviewText] = useState("")
+  const [rating, setRating] = useState(5)
+  const [hoverRating, setHoverRating] = useState(0)
+  const [editingReviewId, setEditingReviewId] = useState<number | null>(null)
+  const [editingText, setEditingText] = useState("")
+  const [editingRating, setEditingRating] = useState(5)
+  const [editingHoverRating, setEditingHoverRating] = useState(0)
+  const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null)
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % SPACE_IMAGES.length)
@@ -60,6 +88,61 @@ export function SpaceDetail({ onBack }: SpaceDetailProps) {
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + SPACE_IMAGES.length) % SPACE_IMAGES.length)
+  }
+
+  const handleSubmitReview = () => {
+    if (!reviewText.trim()) return
+
+    const newReview: Review = {
+      id: Date.now(),
+      name: "You",
+      avatar: "/placeholder.svg?height=40&width=40",
+      rating: rating,
+      date: "Just now",
+      comment: reviewText.trim(),
+      isOwn: true,
+    }
+
+    setReviews((prev) => [newReview, ...prev])
+    setReviewText("")
+    setRating(5)
+  }
+
+  const handleEditReview = (review: Review) => {
+    setEditingReviewId(review.id)
+    setEditingText(review.comment)
+    setEditingRating(review.rating)
+  }
+
+  const handleUpdateReview = () => {
+    if (!editingText.trim() || editingReviewId === null) return
+
+    setReviews((prev) =>
+      prev.map((review) =>
+        review.id === editingReviewId
+          ? { ...review, comment: editingText.trim(), rating: editingRating }
+          : review
+      )
+    )
+    setEditingReviewId(null)
+    setEditingText("")
+    setEditingRating(5)
+  }
+
+  const handleCancelEdit = () => {
+    setEditingReviewId(null)
+    setEditingText("")
+    setEditingRating(5)
+  }
+
+  const handleDeleteReview = (reviewId: number) => {
+    setDeleteConfirmId(reviewId)
+  }
+
+  const confirmDelete = () => {
+    if (deleteConfirmId === null) return
+    setReviews((prev) => prev.filter((review) => review.id !== deleteConfirmId))
+    setDeleteConfirmId(null)
   }
 
   return (
@@ -270,47 +353,167 @@ export function SpaceDetail({ onBack }: SpaceDetailProps) {
 
                   <TabsContent value="reviews" className="p-6">
                     <div className="space-y-6">
-                      {/* Write a Review Button */}
-                      <div className="flex justify-between items-center pb-4 border-b border-border">
-                        <div>
-                          <h3 className="text-lg font-semibold text-foreground">Guest Reviews</h3>
-                          <p className="text-sm text-muted-foreground mt-1">127 verified reviews</p>
-                        </div>
-                        <Button variant="outline" className="gap-2 bg-transparent">
-                          <Star className="h-4 w-4" />
-                          Write a Review
-                        </Button>
+                      {/* Reviews Header */}
+                      <div className="pb-4 border-b border-border">
+                        <h3 className="text-lg font-semibold text-foreground">Guest Reviews</h3>
+                        <p className="text-sm text-muted-foreground mt-1">127 verified reviews</p>
                       </div>
 
                       {/* Reviews List */}
                       <div className="space-y-6">
-                        {MOCK_REVIEWS.map((review) => (
+                        {reviews.map((review, index) => (
                           <div key={review.id} className="space-y-3">
-                            <div className="flex items-start gap-4">
-                              <Avatar className="h-10 w-10">
-                                <AvatarImage src={review.avatar || "/placeholder.svg"} alt={review.name} />
-                                <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
-                              </Avatar>
-                              <div className="flex-1 space-y-2">
-                                <div className="flex items-center justify-between">
-                                  <div>
-                                    <p className="font-semibold text-foreground">{review.name}</p>
-                                    <p className="text-xs text-muted-foreground">{review.date}</p>
-                                  </div>
+                            {editingReviewId === review.id ? (
+                              /* Edit Mode */
+                              <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm font-medium text-foreground">Rating:</span>
                                   <div className="flex items-center gap-1">
-                                    {Array.from({ length: review.rating }).map((_, i) => (
-                                      <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                      <button
+                                        key={i}
+                                        type="button"
+                                        onClick={() => setEditingRating(i + 1)}
+                                        onMouseEnter={() => setEditingHoverRating(i + 1)}
+                                        onMouseLeave={() => setEditingHoverRating(0)}
+                                        className="focus:outline-none"
+                                      >
+                                        <Star
+                                          className={cn(
+                                            "h-5 w-5 transition-colors",
+                                            (editingHoverRating || editingRating) > i
+                                              ? "fill-amber-400 text-amber-400"
+                                              : "text-muted-foreground"
+                                          )}
+                                        />
+                                      </button>
                                     ))}
                                   </div>
                                 </div>
-                                <p className="text-sm text-foreground leading-relaxed">{review.comment}</p>
+                                <Textarea
+                                  value={editingText}
+                                  onChange={(e) => setEditingText(e.target.value)}
+                                  className="min-h-[80px] resize-none"
+                                />
+                                <div className="flex justify-end gap-2">
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={handleCancelEdit}
+                                    className="gap-1"
+                                  >
+                                    <X className="h-4 w-4" />
+                                    Cancel
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    onClick={handleUpdateReview}
+                                    disabled={!editingText.trim()}
+                                    className="gap-1"
+                                  >
+                                    <Check className="h-4 w-4" />
+                                    Save
+                                  </Button>
+                                </div>
                               </div>
-                            </div>
-                            {review.id !== MOCK_REVIEWS[MOCK_REVIEWS.length - 1].id && (
+                            ) : (
+                              /* View Mode */
+                              <div className="flex items-start gap-4">
+                                <Avatar className="h-10 w-10">
+                                  <AvatarImage src={review.avatar || "/placeholder.svg"} alt={review.name} />
+                                  <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <div className="flex-1 space-y-2">
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <p className="font-semibold text-foreground">{review.name}</p>
+                                      <p className="text-xs text-muted-foreground">{review.date}</p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <div className="flex items-center gap-1">
+                                        {Array.from({ length: review.rating }).map((_, i) => (
+                                          <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                                        ))}
+                                      </div>
+                                      {review.isOwn && (
+                                        <div className="flex items-center gap-1 ml-2">
+                                          <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8"
+                                            onClick={() => handleEditReview(review)}
+                                          >
+                                            <Pencil className="h-4 w-4 text-muted-foreground" />
+                                          </Button>
+                                          <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8"
+                                            onClick={() => handleDeleteReview(review.id)}
+                                          >
+                                            <Trash2 className="h-4 w-4 text-muted-foreground" />
+                                          </Button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <p className="text-sm text-foreground leading-relaxed">{review.comment}</p>
+                                </div>
+                              </div>
+                            )}
+                            {index !== reviews.length - 1 && (
                               <div className="border-b border-border pt-3" />
                             )}
                           </div>
                         ))}
+                      </div>
+
+                      {/* Write Review Form */}
+                      <div className="pt-6 border-t border-border space-y-4">
+                        <h4 className="font-semibold text-foreground">Write a Review</h4>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-foreground">Your rating:</span>
+                          <div className="flex items-center gap-1">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <button
+                                key={i}
+                                type="button"
+                                onClick={() => setRating(i + 1)}
+                                onMouseEnter={() => setHoverRating(i + 1)}
+                                onMouseLeave={() => setHoverRating(0)}
+                                className="focus:outline-none"
+                              >
+                                <Star
+                                  className={cn(
+                                    "h-6 w-6 transition-colors",
+                                    (hoverRating || rating) > i
+                                      ? "fill-amber-400 text-amber-400"
+                                      : "text-muted-foreground"
+                                  )}
+                                />
+                              </button>
+                            ))}
+                          </div>
+                          <span className="text-sm text-muted-foreground">
+                            ({hoverRating || rating}/5)
+                          </span>
+                        </div>
+                        <Textarea
+                          placeholder="Share your experience with this space..."
+                          className="min-h-[120px] resize-none"
+                          value={reviewText}
+                          onChange={(e) => setReviewText(e.target.value)}
+                        />
+                        <div className="flex justify-end">
+                          <Button
+                            onClick={handleSubmitReview}
+                            disabled={!reviewText.trim()}
+                            className="gap-2"
+                          >
+                            <Star className="h-4 w-4" />
+                            Submit Review
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </TabsContent>
@@ -325,6 +528,26 @@ export function SpaceDetail({ onBack }: SpaceDetailProps) {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteConfirmId !== null} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
+        <DialogContent showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>Delete Review</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this review? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
