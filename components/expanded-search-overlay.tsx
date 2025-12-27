@@ -52,11 +52,11 @@ export function ExpandedSearchOverlay({ searchParams, onSearch, onClose }: Expan
 
           <h2 className="text-2xl font-bold text-foreground mb-6">Edit your search</h2>
 
-          <div className="flex flex-col md:flex-row gap-4 items-end">
-            <div className="flex-1">
+          <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-end">
+            <div className="flex-1 w-full flex flex-col">
               <label className="text-sm font-semibold text-foreground mb-2 block">What activity?</label>
               <Select value={selectedActivity} onValueChange={setSelectedActivity}>
-                <SelectTrigger className="h-12 py-2 px-3 w-full box-border bg-white border-input rounded-md">
+                <SelectTrigger className="!h-12 min-h-[48px] px-4 w-full bg-white border-input rounded-md">
                   <SelectValue placeholder="Select activity type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -68,23 +68,23 @@ export function ExpandedSearchOverlay({ searchParams, onSearch, onClose }: Expan
               </Select>
             </div>
 
-            <div className="flex-1">
+            <div className="flex-1 w-full flex flex-col">
               <label className="text-sm font-semibold text-foreground mb-2 block">Date</label>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none z-10" />
+                <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none z-10" />
                 <Input
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="h-12 py-2 px-3 w-full box-border pl-10 bg-white border-input rounded-md"
+                  className="!h-12 min-h-[48px] px-4 pl-11 w-full bg-white border-input rounded-md"
                 />
               </div>
             </div>
 
-            <div className="flex-1">
+            <div className="flex-1 w-full flex flex-col">
               <label className="text-sm font-semibold text-foreground mb-2 block">Time</label>
               <Select value={selectedTime} onValueChange={setSelectedTime}>
-                <SelectTrigger className="h-12 py-2 px-3 w-full box-border bg-white border-input rounded-md">
+                <SelectTrigger className="!h-12 min-h-[48px] px-4 w-full bg-white border-input rounded-md">
                   <Clock className="h-5 w-5 text-muted-foreground mr-2" />
                   <SelectValue placeholder="Select time" />
                 </SelectTrigger>
@@ -98,8 +98,8 @@ export function ExpandedSearchOverlay({ searchParams, onSearch, onClose }: Expan
               </Select>
             </div>
 
-            <div className="flex-shrink-0">
-              <Button onClick={handleSearch} className="h-12 py-2 px-8 w-full md:w-auto box-border font-semibold">
+            <div className="flex-shrink-0 w-full md:w-auto flex flex-col justify-end">
+              <Button onClick={handleSearch} className="!h-12 min-h-[48px] px-8 w-full md:w-auto font-semibold">
                 <Search className="h-5 w-5 mr-2" />
                 Search
               </Button>
