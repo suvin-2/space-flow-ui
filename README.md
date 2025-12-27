@@ -38,7 +38,7 @@
 ### 1. 설치 (Installation)
 ```bash
 # 저장소 클론
-git clone [https://github.com/YOUR_GITHUB_ID/space-rental-ui.git](https://github.com/YOUR_GITHUB_ID/space-rental-ui.git)
+git clone https://github.com/suvin-2/space-flow-ui.git
 
 # 프로젝트 폴더로 이동
 cd space-rental-ui

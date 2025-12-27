@@ -53,7 +53,7 @@ export function SpaceDetail({ onBack }: SpaceDetailProps) {
     const newReview: Review = {
       id: Date.now(),
       name: "You",
-      avatar: "/placeholder.svg?height=40&width=40",
+      avatar: "https://picsum.photos/200?random=100",
       rating: rating,
       date: "Just now",
       comment: reviewText.trim(),
@@ -127,30 +127,30 @@ export function SpaceDetail({ onBack }: SpaceDetailProps) {
               <SpaceHeader info={SPACE_INFO} />
 
               {/* Tabs */}
-              <Card className="border-border">
+              <Card className="border-border overflow-hidden">
                 <Tabs defaultValue="about" className="w-full">
-                  <TabsList className="w-full justify-start border-b rounded-none bg-transparent p-0">
+                  <TabsList className="w-full h-auto justify-start bg-transparent border-b border-border rounded-none p-0 gap-0">
                     <TabsTrigger
                       value="about"
-                      className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                      className="h-12 px-6 rounded-none bg-transparent shadow-none border-0 border-b-2 border-transparent text-muted-foreground transition-all focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-0 data-[state=active]:border-b-2 data-[state=active]:border-b-primary data-[state=active]:text-primary data-[state=active]:font-semibold hover:text-foreground"
                     >
                       About
                     </TabsTrigger>
                     <TabsTrigger
                       value="amenities"
-                      className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                      className="h-12 px-6 rounded-none bg-transparent shadow-none border-0 border-b-2 border-transparent text-muted-foreground transition-all focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-0 data-[state=active]:border-b-2 data-[state=active]:border-b-primary data-[state=active]:text-primary data-[state=active]:font-semibold hover:text-foreground"
                     >
                       Amenities
                     </TabsTrigger>
                     <TabsTrigger
                       value="location"
-                      className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                      className="h-12 px-6 rounded-none bg-transparent shadow-none border-0 border-b-2 border-transparent text-muted-foreground transition-all focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-0 data-[state=active]:border-b-2 data-[state=active]:border-b-primary data-[state=active]:text-primary data-[state=active]:font-semibold hover:text-foreground"
                     >
                       Location
                     </TabsTrigger>
                     <TabsTrigger
                       value="reviews"
-                      className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+                      className="h-12 px-6 rounded-none bg-transparent shadow-none border-0 border-b-2 border-transparent text-muted-foreground transition-all focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-0 data-[state=active]:border-b-2 data-[state=active]:border-b-primary data-[state=active]:text-primary data-[state=active]:font-semibold hover:text-foreground"
                     >
                       Reviews
                     </TabsTrigger>
