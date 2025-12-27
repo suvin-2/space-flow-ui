@@ -3,14 +3,13 @@
 import { Card } from "./ui/card"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
-import { Skeleton } from "./ui/skeleton"
 import { Star, MapPin, Users, Clock } from "lucide-react"
 
 const SPACES = [
   {
     id: 1,
     name: "Modern Meeting Room - Gangnam",
-    image: "/modern-photo-studio-main-shot.jpg",
+    image: "https://picsum.photos/800/600?random=1",
     price: 25000,
     rating: 4.9,
     reviews: 127,
@@ -21,7 +20,7 @@ const SPACES = [
   {
     id: 2,
     name: "Professional Photo Studio",
-    image: "/studio-equipment-and-lighting.jpg",
+    image: "https://picsum.photos/800/600?random=2",
     price: 35000,
     rating: 4.8,
     reviews: 89,
@@ -32,7 +31,7 @@ const SPACES = [
   {
     id: 3,
     name: "Event Space with Kitchen",
-    image: "/studio-seating-area.jpg",
+    image: "https://picsum.photos/800/600?random=3",
     price: 40000,
     rating: 5.0,
     reviews: 64,
@@ -43,7 +42,7 @@ const SPACES = [
   {
     id: 4,
     name: "Dance Practice Studio",
-    image: "/studio-white-background.jpg",
+    image: "https://picsum.photos/800/600?random=4",
     price: 20000,
     rating: 4.7,
     reviews: 156,
@@ -54,7 +53,7 @@ const SPACES = [
   {
     id: 5,
     name: "Executive Conference Room",
-    image: "/studio-colorful-backdrop.jpg",
+    image: "https://picsum.photos/800/600?random=5",
     price: 50000,
     rating: 4.9,
     reviews: 43,
@@ -65,7 +64,7 @@ const SPACES = [
   {
     id: 6,
     name: "Creative Workshop Space",
-    image: "/modern-photo-studio-with-professional-lighting.jpg",
+    image: "https://picsum.photos/800/600?random=6",
     price: 30000,
     rating: 4.8,
     reviews: 92,
@@ -105,7 +104,7 @@ export function SpaceListSection({ onSelectSpace, isLoading = false }: SpaceList
           <div>
             <h2 className="text-3xl font-bold text-foreground">Available Spaces</h2>
             {isLoading ? (
-              <Skeleton className="h-4 w-48 mt-1" />
+              <div className="h-4 w-48 mt-1 bg-muted animate-shimmer rounded" />
             ) : (
               <p className="text-muted-foreground mt-1">{SPACES.length} spaces available in your area</p>
             )}
@@ -133,7 +132,7 @@ export function SpaceListSection({ onSelectSpace, isLoading = false }: SpaceList
                   }`}
                   onClick={onSelectSpace}
                 >
-                  <div className="relative h-48 w-full overflow-hidden">
+                  <div className="relative h-60 w-full overflow-hidden">
                     <img
                       src={space.image || "/placeholder.svg"}
                       alt={space.name}

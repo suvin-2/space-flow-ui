@@ -1,18 +1,18 @@
 import type { Review, SpaceImage, SpaceInfo } from "@/lib/types/space"
 
 export const SPACE_IMAGES: SpaceImage[] = [
-  { src: "/modern-photo-studio-main-shot.jpg", alt: "Main space" },
-  { src: "/studio-equipment-and-lighting.jpg", alt: "Space view 2" },
-  { src: "/studio-seating-area.jpg", alt: "Space view 3" },
-  { src: "/studio-white-background.jpg", alt: "Space view 4" },
-  { src: "/studio-colorful-backdrop.jpg", alt: "Space view 5" },
+  { src: "https://picsum.photos/1200/800?random=10", alt: "Main space" },
+  { src: "https://picsum.photos/800/600?random=11", alt: "Space view 2" },
+  { src: "https://picsum.photos/800/600?random=12", alt: "Space view 3" },
+  { src: "https://picsum.photos/800/600?random=13", alt: "Space view 4" },
+  { src: "https://picsum.photos/800/600?random=14", alt: "Space view 5" },
 ]
 
 export const MOCK_REVIEWS: Review[] = [
   {
     id: 1,
     name: "Sarah Kim",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "https://picsum.photos/200?random=101",
     rating: 5,
     date: "2 weeks ago",
     comment:
@@ -21,7 +21,7 @@ export const MOCK_REVIEWS: Review[] = [
   {
     id: 2,
     name: "Michael Chen",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "https://picsum.photos/200?random=102",
     rating: 5,
     date: "1 month ago",
     comment:
@@ -30,7 +30,7 @@ export const MOCK_REVIEWS: Review[] = [
   {
     id: 3,
     name: "Jessica Park",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "https://picsum.photos/200?random=103",
     rating: 4,
     date: "1 month ago",
     comment:
